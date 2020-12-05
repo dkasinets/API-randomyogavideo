@@ -2,6 +2,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Chrome
+from selenium import webdriver
+import os
 from os import path
 import datetime
 import re
@@ -19,14 +21,19 @@ def filter_urls_to_be_yt_videos(urls):
 def get_urls(textToSearch = 'exercise+5min+easy'):
     # Initialize ChromeDriver
     if platform.system() == 'Darwin':
-        driver = Chrome("./chromedriver_macos")
+        driver = Chrome(executable_path="./chromedriver_macos")
     else:
-        driver = Chrome("./chromedriver_linux")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument('--no-sandbox')
+        driver = Chrome(executable_path="./chromedriver_linux", chrome_options=chrome_options)
     
     url = f"https://www.youtube.com/results?search_query={textToSearch}"
     # go to page 
     driver.get(url)
-
+    
     # wait for youtube videos to load
     timeout = 3
     element_present = EC.presence_of_element_located((By.ID, 'contents'))
