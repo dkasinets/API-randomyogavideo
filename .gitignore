@@ -1,1 +1,13 @@
+# ignore pyCharm directory
 .idea/*
+# ignore virtual environment directory
+venv
+# emacs backups
+*~
+~$*
+# compiled python
+*.pyc
+# files created by macos
+.DS_Store
+# ignore Visual Studio Code directory
+.vscode

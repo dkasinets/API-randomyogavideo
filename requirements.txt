@@ -2,3 +2,4 @@ flask
 pandas
 gunicorn
 beautifulsoup4
+selenium

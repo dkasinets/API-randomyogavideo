@@ -1,21 +1,17 @@
 import flask
 from flask import request
-import pandas as pd
-from datetime import datetime as dt
+from html_parser.get_urls import get_urls
 
-data = pd.read_csv('data.csv', names=['s', 'e', 'm']).set_index('m')
-
-series = pd.Series(index=range(data.s.min(), dt.now().year + 1))
-for m in data.index:
-    series.loc[data.loc[m].s:data.loc[m].e] = m
 
 app = flask.Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
 def home():
-    year = int(request.args['year'])
+    word = request.args['word']
     try:
-        return series.loc[year]
+        if word:
+            urls = get_urls(word)
+        return 'word=' + str(word) + " ||| " + str(urls)
     except KeyError:
-        return f'Invalid input ({series.index.min()} - {series.index.max()})'
+        return f'Invalid input ({word})'
