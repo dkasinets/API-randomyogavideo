@@ -5,6 +5,7 @@ from selenium.webdriver import Chrome
 from os import path
 import datetime
 import re
+import platform
 
 
 def filter_urls_to_be_yt_videos(urls):
@@ -17,8 +18,11 @@ def filter_urls_to_be_yt_videos(urls):
 
 def get_urls(textToSearch = 'exercise+5min+easy'):
     # Initialize ChromeDriver
-    driver = Chrome("./chromedriver_macos")
-
+    if platform.system() == 'Darwin':
+        driver = Chrome("./chromedriver_macos")
+    else:
+        driver = Chrome("./chromedriver_linux")
+    
     url = f"https://www.youtube.com/results?search_query={textToSearch}"
     # go to page 
     driver.get(url)
@@ -39,5 +43,7 @@ def get_urls(textToSearch = 'exercise+5min+easy'):
 
     # close driver (we have the links) 
     driver.close()
+
+    video_urls.append(platform.system())
 
     return video_urls
