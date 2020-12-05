@@ -11,20 +11,26 @@ import platform
 
 
 def filter_urls_to_be_yt_videos(urls):
+    """
+    Regex match and remove duplicates to get valid youtube links
+    """
     regex = re.compile(r'^https://www\.youtube\.com/watch\?v=.{11}$', re.IGNORECASE)
     yt_urls_str = list(map(str, urls))
     yt_urls_filtered = list(filter(regex.search, yt_urls_str))
     yt_urls_no_duplicates = list(dict.fromkeys(yt_urls_filtered))
-    return list(map(lambda x: f'<a href="{x}" target="_blank">' + x + '</a>', yt_urls_no_duplicates))
+    return yt_urls_no_duplicates
 
 
-def get_urls(textToSearch = 'exercise+5min+easy'):
-    # Initialize ChromeDriver
+def get_urls(textToSearch):
+    """
+    Get links from youtube that match textToSearch
+    """
+    # Initialize ChromeDriver 
     if platform.system() == 'Darwin':
         driver = Chrome(executable_path="./chromedriver_macos")
     else:
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN") # (headless) Google Chrome
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument('--no-sandbox')
@@ -33,7 +39,7 @@ def get_urls(textToSearch = 'exercise+5min+easy'):
     url = f"https://www.youtube.com/results?search_query={textToSearch}"
     # go to page 
     driver.get(url)
-    
+
     # wait for youtube videos to load
     timeout = 3
     element_present = EC.presence_of_element_located((By.ID, 'contents'))
@@ -50,7 +56,5 @@ def get_urls(textToSearch = 'exercise+5min+easy'):
 
     # close driver (we have the links) 
     driver.close()
-
-    video_urls.append(platform.system())
 
     return video_urls
