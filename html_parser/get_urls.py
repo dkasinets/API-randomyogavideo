@@ -8,6 +8,7 @@ from os import path
 import datetime
 import re
 import platform
+import random
 
 
 def filter_urls_to_be_yt_videos(urls):
@@ -18,7 +19,12 @@ def filter_urls_to_be_yt_videos(urls):
     yt_urls_str = list(map(str, urls))
     yt_urls_filtered = list(filter(regex.search, yt_urls_str))
     yt_urls_no_duplicates = list(dict.fromkeys(yt_urls_filtered))
-    return yt_urls_no_duplicates
+    url_ids = []
+    for url in yt_urls_no_duplicates:
+        m = re.match(r'^https://www\.youtube\.com/watch\?v=(.{11})$', url)
+        url_id = m.groups()[0]
+        url_ids.append(url_id)
+    return url_ids
 
 
 def get_urls(textToSearch):
@@ -56,5 +62,6 @@ def get_urls(textToSearch):
 
     # close driver (we have the links) 
     driver.close()
-
-    return video_urls
+    
+    # return random url in a list 
+    return [random.choice(video_urls)]
