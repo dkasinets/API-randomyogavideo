@@ -17,8 +17,14 @@ def home():
     try:
         if query:
             urls = get_urls(query)
+            status = "success"
+            status_msg = ""
         else:
-            urls = []
-        return json.dumps({ "query": query, "urls": urls, "platform": platform.system(), "status": "success", "status_msg": ""})
+            # Error placeholder video OutKast - B.O.B
+            urls = ["lVehcuJXe6I"]
+            status = "error"
+            status_msg = "Query string is empty or None"
+        return json.dumps({ "query": query, "urls": urls, "platform": platform.system(), "status": status, "status_msg": status_msg})
     except Exception as e:
-        return json.dumps({ "query": query, "urls": ["https://www.youtube.com/watch?v=lVehcuJXe6I"], "platform": platform.system(), "status": "error", "status_msg": f'Error: ({e}).'}) 
+        # Error placeholder video OutKast - B.O.B
+        return json.dumps({ "query": query, "urls": ["lVehcuJXe6I"], "platform": platform.system(), "status": "error", "status_msg": f'Error: ({e}).'}) 
