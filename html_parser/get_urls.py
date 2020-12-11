@@ -27,9 +27,9 @@ def filter_urls_to_be_yt_videos(urls):
     return url_ids
 
 
-def get_urls(textToSearch):
+def get_selenium_driver():
     """
-    Get links from youtube that match textToSearch
+        Initialize selenium driver object
     """
     # Initialize ChromeDriver 
     if platform.system() == 'Darwin':
@@ -41,6 +41,13 @@ def get_urls(textToSearch):
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument('--no-sandbox')
         driver = Chrome(executable_path="./chromedriver_linux", chrome_options=chrome_options)
+    return driver
+
+
+def get_urls(textToSearch, driver):
+    """
+    Get links from youtube that match textToSearch
+    """
     
     url = f"https://www.youtube.com/results?search_query={textToSearch}"
     # go to page 
@@ -50,7 +57,7 @@ def get_urls(textToSearch):
     timeout = 3
     element_present = EC.presence_of_element_located((By.ID, 'contents'))
     WebDriverWait(driver, timeout).until(element_present)
-
+    
     # get the video links
     url_elements = driver.find_elements_by_css_selector("a.yt-simple-endpoint")
     video_urls = []
@@ -59,9 +66,6 @@ def get_urls(textToSearch):
     
     # regex match links to make sure they're from youtube
     video_urls = filter_urls_to_be_yt_videos(video_urls)
-
-    # close driver (we have the links) 
-    driver.close()
     
     # return random url in a list 
     return [random.choice(video_urls)]

@@ -11,3 +11,5 @@ venv
 .DS_Store
 # ignore Visual Studio Code directory
 .vscode
+# log debug file
+log.txt
