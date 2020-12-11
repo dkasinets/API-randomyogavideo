@@ -25,11 +25,11 @@ def home():
             urls = ["mawx7ROXv9o"]
             status = "error"
             status_msg = "Query string is empty or None"
-        # Close driver (we have the link id) 
-        driver.close()
+        # Close all browser windows and end driver's session/process. (we have the link id)
+        driver.quit()
         return json.dumps({ "query": query, "urls": urls, "platform": platform.system(), "status": status, "status_msg": status_msg})
     except Exception as e:
         # Close driver anyway
-        driver.close()
+        driver.quit()
         # Error placeholder video Quick Beginner Yoga
         return json.dumps({ "query": query, "urls": ["mawx7ROXv9o"], "platform": platform.system(), "status": "error", "status_msg": f'Error: ({e}).'}) 
